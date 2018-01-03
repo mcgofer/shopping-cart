@@ -1,7 +1,18 @@
-// an array with all of our cart items
-var cart = [];
-var item = { name: $('.item').data().name, price: $('.item').data().price };
+// local storage functions
 
+var STORAGE_ID = 'shopping-cart';
+var saveToLocalStorage = function () {
+  localStorage.setItem(STORAGE_ID, JSON.stringify(cart));
+};
+//Method to render
+var getFromLocalStorage = function () {
+  return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
+};
+
+// an array with all of our cart items
+
+var cart = getFromLocalStorage();
+var item = { name: $('.item').data().name, price: $('.item').data().price };
 
 
 
@@ -32,6 +43,9 @@ var addItem = function (item) {
   // It simply is for adding an item to the cart array, no HTML involved - honest ;-)
   cart.push(item);
 
+  //add to local storage
+  saveToLocalStorage();
+
 }
 
 var clearCart = function () {
@@ -39,6 +53,8 @@ var clearCart = function () {
   var entireCart = cart.length;
   cart.splice(0, entireCart);
   updateCart();
+  //remove from local storage
+  saveToLocalStorage();
 }
 
 $('.view-cart').on('click', function () {
